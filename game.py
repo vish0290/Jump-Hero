@@ -14,7 +14,7 @@ def main():
     while True:
 
         done = game.processEvents()
-        if done:
+        if done or game.player.lifes == 0:
             game.gameover(screen)
             pygame.time.wait(2000)
             break

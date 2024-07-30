@@ -8,11 +8,12 @@ class Game(object):
     def __init__(self):
         self.currentLevelNumber = 0
         self.levels = {
-            "level1": Level(fileName="graphics/maps/parkour.tmx"),
-            "level2": Level(fileName="graphics/maps/demo_one.tmx"),
-            "level3": Level(fileName="graphics/maps/demo_two.tmx"),
+            "level1": Level(fileName="graphics/maps/level1.tmx"),
+            "level2": Level(fileName="graphics/maps/level2.tmx"),
+            "level3": Level(fileName="graphics/maps/level3.tmx"),
         }
         self.done = False
+        self.level_names = list(self.levels.keys())
         self.currentLevel = self.levels["level1"]
         self.player = Player(
             x=self.currentLevel.spawn_point[0], y=self.currentLevel.spawn_point[1]
@@ -30,6 +31,8 @@ class Game(object):
                     self.player.goRight()
                 elif event.key == pygame.K_SPACE:
                     self.player.jump()
+                elif event.key == pygame.K_UP:
+                    self.player.goup()
 
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT and self.player.changeX < 0:
@@ -40,59 +43,33 @@ class Game(object):
         return self.done
 
     def runLogic(self):
-        if self.player.health <= 0:
-            self.done = True
-        self.player.update()
+        # if self.player.health <= 0:
+        #     self.done = True
+        self.player.update(Game)
 
-        if self.player.rect.y <= 0:
+        if self.player.next_level():
             self.changeLevel("up")
-        elif (
-            self.player.rect.y
-            >= self.currentLevel.mapObject.height
-            * self.currentLevel.mapObject.tileheight
-            - self.player.rect.height
-        ):
+        elif self.player.below_level():
             self.changeLevel("down")
 
     def changeLevel(self, direction):
-        current_x = self.player.rect.x
-        screen_base = screen_height  # The bottom of the screen
 
         if direction == "up":
-            self.currentLevelNumber = (self.currentLevelNumber + 1) % len(self.levels)
-            new_level = self.levels[f"level{self.currentLevelNumber + 1}"]
+            self.currentLevelNumber += 1
 
-            # Calculate new y position for the player
-            map_height_in_pixels = (
-                new_level.mapObject.height * new_level.mapObject.tileheight
+            self.currentLevel = self.levels[self.level_names[self.currentLevelNumber]]
+            self.player = Player(
+                x=self.currentLevel.spawn_point[0], y=self.currentLevel.spawn_point[1]
             )
-            self.player.rect.y = screen_base - (
-                map_height_in_pixels - self.player.rect.y
-            )
-
-            # Ensure the player is within bounds
-            self.player.rect.y = max(0, self.player.rect.y)
-            self.player.rect.y = min(
-                screen_base - self.player.rect.height, self.player.rect.y
-            )
-            print(
-                f"Player moved up to level {self.currentLevelNumber + 1}, player y position: {self.player.rect.y}"
-            )
+            self.player.currentLevel = self.currentLevel
 
         elif direction == "down":
-            self.currentLevelNumber = (self.currentLevelNumber - 1) % len(self.levels)
-            new_level = self.levels[f"level{self.currentLevelNumber + 1}"]
-
-            # Set player to the top of the new level
-            self.player.rect.y = 0
-            print(
-                f"Player moved down to level {self.currentLevelNumber + 1}, player y position: {self.player.rect.y}"
+            self.currentLevelNumber -= 1
+            self.currentLevel = self.levels[self.level_names[self.currentLevelNumber]]
+            self.player = Player(
+                x=self.currentLevel.spawn_point[0], y=self.currentLevel.spawn_point[1]
             )
-
-        # Set the new level and update player's level
-        self.currentLevel = new_level
-        self.player.currentLevel = self.currentLevel
-        self.player.rect.x = current_x
+            self.player.currentLevel = self.currentLevel
 
     def draw(self, screen):
         screen.fill(background)
@@ -113,11 +90,11 @@ class Game(object):
     def gameover(self, screen):
         screen.fill((0, 0, 0))
         font = pygame.font.Font(None, 36)
-        if self.player.health <= 0:
+        if self.player.lifes == 0:
             text = font.render("Game Over", True, (255, 255, 255))
-        text_rect = text.get_rect(center=(screen_width / 2, screen_height / 2))
-        screen.blit(text, text_rect)
-        pygame.display.flip()
+            text_rect = text.get_rect(center=(screen_width / 2, screen_height / 2))
+            screen.blit(text, text_rect)
+            pygame.display.flip()
 
 
 class Player(pygame.sprite.Sprite):
@@ -133,6 +110,7 @@ class Player(pygame.sprite.Sprite):
         self.jumpingLeft = player_jump_left()
         self.image = self.idleRight[0]
         self.health = 100
+        self.lifes = 3
 
         # Set player position
         self.rect = self.image.get_rect()
@@ -152,6 +130,9 @@ class Player(pygame.sprite.Sprite):
         # Player's current level, set after object initialized in game constructor
         self.currentLevel = None
 
+        self.highestY = y
+        self.fallThreshold = 15
+
     def on_ground(self):
         self.rect.y += 1
         on_ground = pygame.sprite.spritecollideany(
@@ -163,8 +144,25 @@ class Player(pygame.sprite.Sprite):
     def applyGravity(self):
         if not self.on_ground():
             self.changeY += 0.35
+            if self.rect.y < self.highestY:
+                self.highestY = self.rect.y
         else:
             self.changeY = 0
+            self.fallDamage()
+
+    def fallDamage(self):
+        fall_height = self.rect.y - self.highestY
+        if fall_height > self.fallThreshold:
+            self.health -= 10
+            if self.health <= 0:
+                self.lifes -= 1
+                self.health = 100
+                if self.lifes <= 0:
+                    self.done = True  # End the game if no lives are left
+            print(
+                f"Fall damage taken. Fall height: {fall_height}, Health: {self.health}, Lives: {self.lifes}"
+            )
+        self.highestY = self.rect.y
 
     def jump(self):
         if self.on_ground():
@@ -183,6 +181,10 @@ class Player(pygame.sprite.Sprite):
         self.direction = "left"
         self.running = True
         self.changeX = -3
+
+    def goup(self):
+        if god_mode:
+            self.changeY = -3
 
     def stop(self):
         self.running = False
@@ -227,15 +229,48 @@ class Player(pygame.sprite.Sprite):
                 else:
                     self.rect.right = collided_tile.rect.left
 
-    def update(self):
+    def next_level(self) -> bool:
+        if not self.on_ground():
+            collided_tile = pygame.sprite.spritecollideany(
+                self, self.currentLevel.layers[4].tiles
+            )
+            if collided_tile:
+                return True
+                print("Next level")
+            else:
+                return False
+                print("Not next level")
+
+    def below_level(self) -> bool:
+        if not self.on_ground():
+            collided_tile = pygame.sprite.spritecollideany(
+                self, self.currentLevel.layers[5].tiles
+            )
+            if collided_tile:
+                return True
+            else:
+                return False
+
+    def scorecard(self):
+        font = pygame.font.Font(None, 36)
+        text = font.render(
+            f"Health: {self.health} \n Lifes: {self.lifes}", True, (65, 105, 225)
+        )
+        return text
+
+    def update(self, Game):
         self.groudCollide()
         self.rect.x += self.changeX
         self.rect.y += self.changeY
         self.ceilingCollide()
         self.floating_floor_collide()
-        self.applyGravity()
+        if not god_mode:
+            self.applyGravity()
         self.wallCollide()
-
+        self.fallDamage()
+        res = self.next_level()
+        print(res)
+        print(f"Player position: {self.rect.x}, {self.rect.y}")
         if self.on_ground() and self.changeY >= 0:
             self.changeY = 0
             collided_tile = pygame.sprite.spritecollideany(
@@ -288,6 +323,8 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+        score = self.scorecard()
+        screen.blit(score, (10, 10))
 
 
 class Level(object):
@@ -320,7 +357,7 @@ class Level(object):
                 if image:  # If there's a tile image, consider it the spawn point
                     self.spawn_point = (
                         x * self.mapObject.tilewidth,
-                        y * self.mapObject.tileheight,
+                        y * self.mapObject.tileheight + 1,
                     )
                     break
 
