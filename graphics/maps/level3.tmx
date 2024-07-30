@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
+ <tileset firstgid="1" name="lab" tilewidth="32" tileheight="32" tilecount="81" columns="9">
+  <image source="../Sprites/lab Tileset/level_tileset.png" width="300" height="300"/>
+ </tileset>
+ <layer id="1" name="background" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAMBKHb37/f2ugACaumqqqqqk8f/C0zkQ==
+  </data>
+ </layer>
+ <layer id="2" name="ground" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztlFEKwCAMQ0u9/52HbP52GHB71T7wTyFNTM2KFfhzToUyvxtHi0p2/bug5rDDH8xOZXBTHmiUbxqn9y7j7ETNND1vtMn7LrxZzV+eE70g8HUvqRk0Y2mLciHuUgo9w9H1KM9oH1xCWQBv
+  </data>
+ </layer>
+ <layer id="3" name="walls" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzrsOgCAQBdHro7Llh/l0tzREGwa7mWTDFkDOlmSvOT7OsfHOcz9rrpc3s7Wkt4X/la3rm08fSx9LH0sfSx9LH0sfSx9LH0sfSx9LH0sf6w/fDSyEJFg=
+  </data>
+ </layer>
+ <layer id="4" name="spawn_point" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztz7ENADAIBLHv2X/ftGwAQbZ0A1wCAAAAMK9av6rc+NjmAZHwAE4=
+  </data>
+ </layer>
+ <layer id="5" name="next_level" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztw6ENAAAIA7B5/v8XP4FEtUmT21QAAAAA+LRFZQAt
+  </data>
+ </layer>
+ <layer id="6" name="below_level" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztySEKAAAIBEG7//+vCCbBZpyBLXcRAAAAAPArp2vfXX8rJlgAhQ==
+  </data>
+ </layer>
+</map>

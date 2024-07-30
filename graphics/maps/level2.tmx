@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
+ <tileset firstgid="1" name="dungen tile" tilewidth="32" tileheight="32" tilecount="56" columns="8">
+  <image source="../Sprites/dungen bricks/[32x32] Dungeon Bricks Plain.png" width="256" height="224"/>
+ </tileset>
+ <tileset firstgid="57" name="tile shadow" tilewidth="32" tileheight="32" tilecount="56" columns="8">
+  <image source="../Sprites/dungen bricks/[32x32] Dungeon Bricks Shadow.png" width="256" height="224"/>
+ </tileset>
+ <layer id="1" name="background" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztw0ENAAAMA6HTVv+iZmMPSFg1VVVVVX36AIuZNXA=
+  </data>
+ </layer>
+ <layer id="2" name="ground" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJxjYBi6IBGIkwfaEVAAcksSFGNzEyH5UUA8GKiwHA5xOBz8QAwYjv4cjn4aKDCY6o6BACPd/yCQhgXDACx8RnoYBQJxEBAHU8m8SCCOAuJoKpkHKxNHejwNh/w8HOJyMMXDYHLLQILRcMAN6Jnnhks8DIdyChsYCH9ZoWFS5QFntB2Q
+  </data>
+ </layer>
+ <layer id="3" name="walls" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztz7EJwDAQA0DNZZfeJXNk9Lg2jouQQAwnUPc6+JqcJcldx6xua2/r3mT2KI3H4/F4PB7vY+942fv7vzwej8fj8Xg7ehemdUCo
+  </data>
+ </layer>
+ <layer id="4" name="spawn_point" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztw6ENAAAIA7Ddxv9HYSdRqDZpAgAAAMDVVH4sL28Axw==
+  </data>
+ </layer>
+ <layer id="5" name="next_level" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztw6ENAAAIA7Ddxv9H4SeQqDZpcpsKAAAAAJ8WQq0BCQ==
+  </data>
+ </layer>
+ <layer id="6" name="below_level" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztyaENAAAIwDBu4/+jCA4FBtkmU4sAAAAAgF852t71WwF/CAKV
+  </data>
+ </layer>
+</map>

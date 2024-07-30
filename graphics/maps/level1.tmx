@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="1">
+ <tileset firstgid="1" name="base_terrain" tilewidth="32" tileheight="32" tilecount="247" columns="19">
+  <image source="../Sprites/14-TileSets/Terrain (32x32).png" width="608" height="416"/>
+ </tileset>
+ <tileset firstgid="248" name="door" tilewidth="46" tileheight="56" tilecount="1" columns="1">
+  <image source="../Sprites/11-Door/Idle.png" width="46" height="56"/>
+ </tileset>
+ <layer id="1" name="background" width="20" height="60" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJztw0ENAAAMA6GzU/8GZ2MPSFg1VVVVVX36AL7FwDE=
+  </data>
+ </layer>
+ <layer id="3" name="ground" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFhEDqANqdCMRJQJw8gG4YBcSBgUwnQwkMVJqWpLJ59lQ2byAAtcNEB48cKN5JjfPhEMaUgFggjqOieQVAXEiB/oEq42htLy3zATHlHSH/jZR8MBzK6KHeZiOnnKYVGCxtqqEepzBATngOljggBgymtEssGMi0Rc/wGqi4Ge2/Dx6gB8RiVML6QAwAsKgUqQ==
+  </data>
+ </layer>
+ <layer id="2" name="walls" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzDENACAMRcH6AAEEDfjXBQIoA2EhuZf8rb0SEeOwXdltXevJz02Nx+PxeDwej8fj8Xg8Ho/3nfe6CTDlFdg=
+  </data>
+ </layer>
+ <layer id="4" name="spawn_point" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztw7ENAAAIA6Be4f+nunfVERISAAAAAPg19WIBKtAAWQ==
+  </data>
+ </layer>
+ <layer id="7" name="next_level" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztwzENAAAIA7DZwb9BDCycXG3S5DYlAAAAAHxZ90oAzg==
+  </data>
+ </layer>
+ <layer id="8" name="below_level" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAA4NcAEsAAAQ==
+  </data>
+ </layer>
+ <layer id="5" name="decor" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztziEBAAAIA7D3T4ykwS2CLcESAAAAAL6b60CxqeAA+Q==
+  </data>
+ </layer>
+</map>
