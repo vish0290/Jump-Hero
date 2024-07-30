@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1">
+ <tileset firstgid="1" name="Terrain" tilewidth="32" tileheight="32" tilecount="247" columns="19">
+  <image source="../../../Downloads/Kings and Pigs/Sprites/14-TileSets/Terrain (32x32).png" width="608" height="416"/>
+ </tileset>
+ <tileset firstgid="248" name="Decorations " tilewidth="32" tileheight="32" tilecount="42" columns="7">
+  <image source="../../../Downloads/Kings and Pigs/Sprites/14-TileSets/Decorations (32x32).png" width="224" height="192"/>
+ </tileset>
+ <tileset firstgid="290" name="Opening door" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="../../../Downloads/Kings and Pigs/Sprites/11-Door/Idle.png" width="46" height="56"/>
+ </tileset>
+ <layer id="1" name="background" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztw0ENAAAMA6GzU/8GZ2MPSFg1VVVVVX36AL7FwDE=
+  </data>
+ </layer>
+ <layer id="4" name="ground" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt1kEKgDAMBMB8tZb8/wvGm5RiibAkGzKw4MFDurVUkZaNWoblsszlmYFGD+CUrV99JVK2XiLs9oD5bLLqnrG637PuiMffvcpw76JU+H4rrAGNvSP2+REq/HOyzn1SdV0o+hHP+48biikc9g==
+  </data>
+ </layer>
+ <layer id="2" name="walls" width="20" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztzDENAAAMw7ABKn98ewqhpyPldW5XOo/H4/F4PB6Px+PxeDwej7fyHqNPFKE=
+  </data>
+ </layer>
+</map>
