@@ -45,7 +45,7 @@ class Game(object):
     def runLogic(self):
         # if self.player.health <= 0:
         #     self.done = True
-        self.player.update(Game)
+        self.player.update()
 
         if self.player.next_level():
             self.changeLevel("up")
@@ -111,6 +111,7 @@ class Player(pygame.sprite.Sprite):
         self.image = self.idleRight[0]
         self.health = 100
         self.lifes = 3
+        self.score = 0
 
         # Set player position
         self.rect = self.image.get_rect()
@@ -130,8 +131,9 @@ class Player(pygame.sprite.Sprite):
         # Player's current level, set after object initialized in game constructor
         self.currentLevel = None
 
-        self.highestY = y
-        self.fallThreshold = 15
+        self.highestY = map_height
+        self.actualY = map_height
+        self.fallThreshold = 350
 
     def on_ground(self):
         self.rect.y += 1
@@ -144,16 +146,13 @@ class Player(pygame.sprite.Sprite):
     def applyGravity(self):
         if not self.on_ground():
             self.changeY += 0.35
-            if self.rect.y < self.highestY:
-                self.highestY = self.rect.y
         else:
             self.changeY = 0
-            self.fallDamage()
 
     def fallDamage(self):
-        fall_height = self.rect.y - self.highestY
+        fall_height = (self.rect.y - self.currentLevel.levelShift[1]) - self.actualY
         if fall_height > self.fallThreshold:
-            self.health -= 10
+            self.health -= 10 * (fall_height - self.fallThreshold) // 100
             if self.health <= 0:
                 self.lifes -= 1
                 self.health = 100
@@ -162,7 +161,6 @@ class Player(pygame.sprite.Sprite):
             print(
                 f"Fall damage taken. Fall height: {fall_height}, Health: {self.health}, Lives: {self.lifes}"
             )
-        self.highestY = self.rect.y
 
     def jump(self):
         if self.on_ground():
@@ -258,7 +256,7 @@ class Player(pygame.sprite.Sprite):
         )
         return text
 
-    def update(self, Game):
+    def update(self):
         self.groudCollide()
         self.rect.x += self.changeX
         self.rect.y += self.changeY
@@ -267,10 +265,7 @@ class Player(pygame.sprite.Sprite):
         if not god_mode:
             self.applyGravity()
         self.wallCollide()
-        self.fallDamage()
-        res = self.next_level()
-        print(res)
-        print(f"Player position: {self.rect.x}, {self.rect.y}")
+
         if self.on_ground() and self.changeY >= 0:
             self.changeY = 0
             collided_tile = pygame.sprite.spritecollideany(
@@ -304,6 +299,24 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = screen_height - 200
             self.currentLevel.shiftLevel(0, -difference)
 
+        if (
+            self.rect.y - self.currentLevel.levelShift[1]
+        ) < self.actualY and self.on_ground():
+            self.actualY = self.rect.y - self.currentLevel.levelShift[1]
+            if self.actualY < self.highestY:
+                self.highestY = self.actualY
+                self.score += 100
+
+        if (
+            self.actualY < (self.rect.y - self.currentLevel.levelShift[1])
+            and self.on_ground()
+        ):
+            self.fallDamage()
+            self.actualY = self.rect.y - self.currentLevel.levelShift[1]
+
+        print(
+            f"player y: {self.actualY}, highest y: {self.highestY}, score: {self.score}"
+        )
         # Update the player's animation frame
         if self.running:
             if self.direction == "right":
@@ -325,6 +338,16 @@ class Player(pygame.sprite.Sprite):
         screen.blit(self.image, self.rect)
         score = self.scorecard()
         screen.blit(score, (10, 10))
+
+    def scorecard(self):
+        font = pygame.font.Font(None, 36)
+        score_text = f"Score: {self.score}"
+        health_text = f"Health: {self.health}"
+        lifes_text = f"Lives: {self.lifes}"
+        text_surface = font.render(
+            f"{score_text}  |  {health_text}  |  {lifes_text}", True, (255, 255, 255)
+        )
+        return text_surface
 
 
 class Level(object):

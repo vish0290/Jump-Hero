@@ -12,3 +12,4 @@ map_ground_layer = 1
 background = (0, 0, 0)
 debug_frames = False
 god_mode = False
+map_height = 1920
