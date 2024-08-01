@@ -19,6 +19,9 @@ class Game(object):
             x=self.currentLevel.spawn_point[0], y=self.currentLevel.spawn_point[1]
         )
         self.player.currentLevel = self.currentLevel
+        self.score = 0
+        self.main_score = 0
+        self.start_ticks = pygame.time.get_ticks()
 
     def processEvents(self):
         for event in pygame.event.get():
@@ -43,11 +46,13 @@ class Game(object):
         return self.done
 
     def runLogic(self):
-        # if self.player.health <= 0:
-        #     self.done = True
         self.player.update()
+        self.score = self.player.score
+        self.health = self.player.health
+        self.lifes = self.player.lifes
 
         if self.player.next_level():
+            self.main_score += self.score
             self.changeLevel("up")
         elif self.player.below_level():
             self.changeLevel("down")
@@ -75,6 +80,8 @@ class Game(object):
         screen.fill(background)
         self.currentLevel.draw(screen)
         self.player.draw(screen)
+        score = self.scorecard()
+        screen.blit(score, (10, 10))
         if debug_frames:
             pygame.draw.rect(
                 screen, (0, 255, 0), self.player.rect, 2
@@ -96,19 +103,31 @@ class Game(object):
             screen.blit(text, text_rect)
             pygame.display.flip()
 
+    def scorecard(self):
+        font = pygame.font.Font(None, 36)
+        score_text = f"Score: {self.score+self.main_score}"
+        health_text = f"Health: {self.health}"
+        lifes_text = f"Lives: {self.lifes}"
+        elapsed_seconds = (pygame.time.get_ticks() - self.start_ticks) / 1000
+        hours = int(elapsed_seconds // 3600)
+        minutes = int((elapsed_seconds % 3600) // 60)
+        seconds = int(elapsed_seconds % 60)
+        timer_text = f"{hours:02}:{minutes:02}:{seconds:02}"
+        text_surface = font.render(
+            f"{score_text}  |  {health_text}  |  {lifes_text} | {timer_text}",
+            True,
+            (255, 255, 255),
+        )
+        return text_surface
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
 
         # Load the spritesheet of frames for this player
-        self.idleRight = player_idle_right()
-        self.idleLeft = player_idle_left()
-        self.runRight = player_walk_right()
-        self.runLeft = player_walk_left()
-        self.jumpingRight = player_jump_right()
-        self.jumpingLeft = player_jump_left()
-        self.image = self.idleRight[0]
+        self.newplayerframes = playerFrames()
+        self.image = self.newplayerframes["idle"]["right"][0]
         self.health = 100
         self.lifes = 3
         self.score = 0
@@ -122,6 +141,7 @@ class Player(pygame.sprite.Sprite):
         self.changeX = 0
         self.changeY = 0
         self.direction = "right"
+        self.action = "idle"
 
         # Boolean to check if player is running, current running frame, and time since last frame change
         self.running = False
@@ -134,6 +154,7 @@ class Player(pygame.sprite.Sprite):
         self.highestY = map_height
         self.actualY = map_height
         self.fallThreshold = 350
+        self.start_ticks = pygame.time.get_ticks()
 
     def on_ground(self):
         self.rect.y += 1
@@ -165,28 +186,29 @@ class Player(pygame.sprite.Sprite):
     def jump(self):
         if self.on_ground():
             self.changeY = -10
-            if self.direction == "right":
-                self.image = self.jumpingRight[1]
-            else:
-                self.image = self.jumpingLeft[1]
+            self.action = "jump"
 
     def goRight(self):
+        self.action = "run"
         self.direction = "right"
         self.running = True
         self.changeX = 3
 
     def goLeft(self):
+        self.action = "run"
         self.direction = "left"
         self.running = True
         self.changeX = -3
 
     def goup(self):
         if god_mode:
+            self.action = "jump"
             self.changeY = -3
 
     def stop(self):
         self.running = False
         self.changeX = 0
+        self.action = "idle"
 
     def wallCollide(self):
         collided_tile = pygame.sprite.spritecollideany(
@@ -248,13 +270,6 @@ class Player(pygame.sprite.Sprite):
                 return True
             else:
                 return False
-
-    def scorecard(self):
-        font = pygame.font.Font(None, 36)
-        text = font.render(
-            f"Health: {self.health} \n Lifes: {self.lifes}", True, (65, 105, 225)
-        )
-        return text
 
     def update(self):
         self.groudCollide()
@@ -318,36 +333,21 @@ class Player(pygame.sprite.Sprite):
             f"player y: {self.actualY}, highest y: {self.highestY}, score: {self.score}"
         )
         # Update the player's animation frame
-        if self.running:
-            if self.direction == "right":
-                self.image = self.runRight[self.runningFrame]
-            else:
-                self.image = self.runLeft[self.runningFrame]
-        else:
-            if self.direction == "right":
-                self.image = self.idleRight[self.runningFrame]
-            else:
-                self.image = self.idleLeft[self.runningFrame]
-
-        # Update the running frame
-        if pygame.time.get_ticks() - self.runningTime > 200:
-            self.runningTime = pygame.time.get_ticks()
-            self.runningFrame = (self.runningFrame + 1) % 5
+        try:
+            self.image = self.newplayerframes[self.action][self.direction][
+                self.runningFrame
+            ]
+        except:
+            pass  # few sprites are missing because there are less frames in few actions
+        now = pygame.time.get_ticks()
+        if now - self.runningTime > 200:
+            self.runningTime = now
+            self.runningFrame = (self.runningFrame + 1) % len(
+                self.newplayerframes[self.action][self.direction]
+            )
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
-        score = self.scorecard()
-        screen.blit(score, (10, 10))
-
-    def scorecard(self):
-        font = pygame.font.Font(None, 36)
-        score_text = f"Score: {self.score}"
-        health_text = f"Health: {self.health}"
-        lifes_text = f"Lives: {self.lifes}"
-        text_surface = font.render(
-            f"{score_text}  |  {health_text}  |  {lifes_text}", True, (255, 255, 255)
-        )
-        return text_surface
 
 
 class Level(object):

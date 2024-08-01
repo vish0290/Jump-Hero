@@ -11,5 +11,5 @@ map_collision_layer = 2
 map_ground_layer = 1
 background = (0, 0, 0)
 debug_frames = False
-god_mode = False
+god_mode = True
 map_height = 1920
