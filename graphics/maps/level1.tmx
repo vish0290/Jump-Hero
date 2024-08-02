@@ -6,14 +6,14 @@
  <tileset firstgid="248" name="door" tilewidth="46" tileheight="56" tilecount="1" columns="1">
   <image source="../Sprites/11-Door/Idle.png" width="46" height="56"/>
  </tileset>
- <layer id="1" name="background" width="20" height="60" visible="0">
+ <layer id="1" name="background" width="20" height="60">
   <data encoding="base64" compression="zlib">
    eJztw0ENAAAMA6GzU/8GZ2MPSFg1VVVVVX36AL7FwDE=
   </data>
  </layer>
  <layer id="3" name="ground" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFhEDqANqdCMRJQJw8gG4YBcSBgUwnQwkMVJqWpLJ59lQ2byAAtcNEB48cKN5JjfPhEMaUgFggjqOieQVAXEiB/oEq42htLy3zATHlHSH/jZR8MBzK6KHeZiOnnKYVGCxtqqEepzBATngOljggBgymtEssGMi0Rc/wGqi4Ge2/Dx6gB8RiVML6QAwAsKgUqQ==
+   eJxjYBgFhEDqQDsADSQCcfJAOwIJgNyTxDC43DQQYLClk8EKBiq9SFLZPHsqmzcQgNphooNHjpxyaziEMSUgFojjqGheARAXUqB/oMo4WttLy3xATHlHyH8jJR8MhzJ6qLeHBlP7crC0qYZ6nMIAOeE5WOKAGDCY0i6xYCDTFj3Da6DiZiDT73ApN6gF9IBYjEpYH4gBALcVbQ==
   </data>
  </layer>
  <layer id="2" name="walls" width="20" height="60">
@@ -33,12 +33,12 @@
  </layer>
  <layer id="8" name="below_level" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAA4NcAEsAAAQ==
+   eJztzjEBAAAIwKDVsX9BE3j7QAIKar4DAAAAAIcFwFYAKg==
   </data>
  </layer>
  <layer id="5" name="decor" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztziEBAAAIA7D3T4ykwS2CLcESAAAAAL6b60CxqeAA+Q==
+   eJztzjENAAAIA7D5V8yJixGSVkETAAAAAL6Z60DRAvdgAPk=
   </data>
  </layer>
 </map>

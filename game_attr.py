@@ -23,6 +23,20 @@ class Game(object):
         self.main_score = 0
         self.start_ticks = pygame.time.get_ticks()
 
+        self.level_music = {
+            "level1": "audio/level1.mp3",
+            "level2": "audio/level2.mp3",
+            "level3": "audio/level3.mp3",
+        }
+        self.currentLevel_music = None
+        self.play_music("level1")
+
+    def play_music(self, level):
+        if self.currentLevel_music:
+            self.currentLevel_music.stop()
+        self.currentLevel_music = pygame.mixer.Sound(self.level_music[level])
+        self.currentLevel_music.play(-1)
+
     def processEvents(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -36,6 +50,8 @@ class Game(object):
                     self.player.jump()
                 elif event.key == pygame.K_UP:
                     self.player.goup()
+                elif event.key == pygame.K_DOWN:
+                    self.player.godown()
 
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT and self.player.changeX < 0:
@@ -54,27 +70,30 @@ class Game(object):
         if self.player.next_level():
             self.main_score += self.score
             self.changeLevel("up")
-        elif self.player.below_level():
+        elif self.player.below_level() and self.currentLevelNumber > 0:
             self.changeLevel("down")
 
     def changeLevel(self, direction):
-
         if direction == "up":
             self.currentLevelNumber += 1
-
-            self.currentLevel = self.levels[self.level_names[self.currentLevelNumber]]
-            self.player = Player(
-                x=self.currentLevel.spawn_point[0], y=self.currentLevel.spawn_point[1]
-            )
-            self.player.currentLevel = self.currentLevel
-
         elif direction == "down":
             self.currentLevelNumber -= 1
-            self.currentLevel = self.levels[self.level_names[self.currentLevelNumber]]
-            self.player = Player(
-                x=self.currentLevel.spawn_point[0], y=self.currentLevel.spawn_point[1]
-            )
-            self.player.currentLevel = self.currentLevel
+
+        self.currentLevel = self.levels[self.level_names[self.currentLevelNumber]]
+
+        if direction == "up":
+            new_pos = self.currentLevel.spawn_point
+        else:
+            new_pos = self.currentLevel.drop_point
+
+        print(f"Changing to level: {self.level_names[self.currentLevelNumber]}")
+        print(f"New player position: {new_pos}")
+
+        self.player = Player(x=new_pos[0], y=new_pos[1])
+        self.player.currentLevel = self.currentLevel
+        self.play_music(self.level_names[self.currentLevelNumber])
+
+        print(f"Player rect after change: { self.player.rect}")
 
     def draw(self, screen):
         screen.fill(background)
@@ -156,6 +175,10 @@ class Player(pygame.sprite.Sprite):
         self.fallThreshold = 350
         self.start_ticks = pygame.time.get_ticks()
 
+        # game audio
+        self.jump_sound = pygame.mixer.Sound("audio/jump.wav")
+        self.hurt_sound = pygame.mixer.Sound("audio/hurt.wav")
+
     def on_ground(self):
         self.rect.y += 1
         on_ground = pygame.sprite.spritecollideany(
@@ -173,20 +196,21 @@ class Player(pygame.sprite.Sprite):
     def fallDamage(self):
         fall_height = (self.rect.y - self.currentLevel.levelShift[1]) - self.actualY
         if fall_height > self.fallThreshold:
+            self.action = "hurt"
+            self.hurt_sound.play()
             self.health -= 10 * (fall_height - self.fallThreshold) // 100
             if self.health <= 0:
+                self.action = "dead"
                 self.lifes -= 1
                 self.health = 100
                 if self.lifes <= 0:
                     self.done = True  # End the game if no lives are left
-            print(
-                f"Fall damage taken. Fall height: {fall_height}, Health: {self.health}, Lives: {self.lifes}"
-            )
 
     def jump(self):
         if self.on_ground():
             self.changeY = -10
             self.action = "jump"
+            self.jump_sound.play()
 
     def goRight(self):
         self.action = "run"
@@ -204,6 +228,11 @@ class Player(pygame.sprite.Sprite):
         if god_mode:
             self.action = "jump"
             self.changeY = -3
+
+    def godown(self):
+        if god_mode:
+            self.action = "jump"
+            self.changeY = 3
 
     def stop(self):
         self.running = False
@@ -255,11 +284,10 @@ class Player(pygame.sprite.Sprite):
                 self, self.currentLevel.layers[4].tiles
             )
             if collided_tile:
+                self.changeY = 0
                 return True
-                print("Next level")
             else:
                 return False
-                print("Not next level")
 
     def below_level(self) -> bool:
         if not self.on_ground():
@@ -267,6 +295,7 @@ class Player(pygame.sprite.Sprite):
                 self, self.currentLevel.layers[5].tiles
             )
             if collided_tile:
+                self.changeY = 0
                 return True
             else:
                 return False
@@ -330,7 +359,7 @@ class Player(pygame.sprite.Sprite):
             self.actualY = self.rect.y - self.currentLevel.levelShift[1]
 
         print(
-            f"player y: {self.actualY}, highest y: {self.highestY}, score: {self.score}"
+            f"player y: {self.actualY},{self.currentLevel.spawn_point[1]} highest y: {self.highestY}"
         )
         # Update the player's animation frame
         try:
@@ -338,6 +367,7 @@ class Player(pygame.sprite.Sprite):
                 self.runningFrame
             ]
         except:
+
             pass  # few sprites are missing because there are less frames in few actions
         now = pygame.time.get_ticks()
         if now - self.runningTime > 200:
@@ -356,10 +386,13 @@ class Level(object):
         self.layers = []
         self.levelShift = [0, 0]
         self.spawn_point = None
+        self.drop_point = None
         for layer in range(len(self.mapObject.layers)):
             self.layers.append(Layer(index=layer, mapObject=self.mapObject))
 
+        self.set_drop_point()
         self.set_spawn_point()
+        print(f"Spawn point: {self.spawn_point}")
 
     def set_spawn_point(self):
         spawn_layer_name = "spawn_point"
@@ -380,7 +413,7 @@ class Level(object):
                 if image:  # If there's a tile image, consider it the spawn point
                     self.spawn_point = (
                         x * self.mapObject.tilewidth,
-                        y * self.mapObject.tileheight + 1,
+                        y * self.mapObject.tileheight - 1,
                     )
                     break
 
@@ -390,6 +423,36 @@ class Level(object):
                 50,
                 self.mapObject.height * self.mapObject.tileheight - 100,
             )  # Default position
+
+    def set_drop_point(self):
+        drop_layer_name = "below_level"
+        drop_layer = None
+
+        for layer in self.mapObject.visible_layers:
+            if (
+                isinstance(layer, pytmx.TiledTileLayer)
+                and layer.name == drop_layer_name
+            ):
+                drop_layer = layer
+                break
+
+        # If the drop layer is found, determine the drop point
+        if drop_layer:
+            # Iterate over tiles in the drop layer
+            for x, y, image in drop_layer.tiles():
+                if image:
+                    self.drop_point = (
+                        x * self.mapObject.tilewidth,
+                        y * self.mapObject.tileheight + 1,
+                    )
+                    break
+                    # exit()
+
+        if not self.drop_point:
+            self.drop_point = (
+                50,
+                self.mapObject.height * self.mapObject.tileheight - 100,
+            )
 
     def shiftLevel(self, shiftX, shiftY):
 
