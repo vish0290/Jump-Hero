@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
- <tileset firstgid="1" name="demo" tilewidth="32" tileheight="32" tilecount="96" columns="0">
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="2">
+ <tileset firstgid="1" name="park" tilewidth="32" tileheight="32" tilecount="96" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
   <tile id="0">
    <image source="../Sprites/Free Park Zone Tileset/1 Tiles/Tile_96.png" width="32" height="32"/>
@@ -291,43 +291,179 @@
    <image source="../Sprites/Free Park Zone Tileset/1 Tiles/Tile_01.png" width="32" height="32"/>
   </tile>
  </tileset>
- <tileset firstgid="97" name="castle_stones" tilewidth="32" tileheight="32" tilecount="72" columns="12">
-  <image source="../../../Downloads/tilesets/castle_stones/castle_stones.png" width="384" height="192"/>
+ <tileset firstgid="97" name="back" tilewidth="576" tileheight="324" tilecount="6" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Day/Background.png" width="576" height="324"/>
+  </tile>
+  <tile id="1">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Day/5.png" width="576" height="324"/>
+  </tile>
+  <tile id="2">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Day/4.png" width="576" height="324"/>
+  </tile>
+  <tile id="3">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Day/3.png" width="576" height="324"/>
+  </tile>
+  <tile id="4">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Day/2.png" width="576" height="324"/>
+  </tile>
+  <tile id="5">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Day/1.png" width="576" height="324"/>
+  </tile>
  </tileset>
- <tileset firstgid="169" name="Terrain (32x32)" tilewidth="32" tileheight="32" tilecount="247" columns="19">
-  <image source="../Sprites/14-TileSets/Terrain (32x32).png" width="608" height="416"/>
+ <tileset firstgid="103" name="back 2" tilewidth="576" tileheight="324" tilecount="5" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="1">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Night/5.png" width="576" height="324"/>
+  </tile>
+  <tile id="2">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Night/4.png" width="576" height="324"/>
+  </tile>
+  <tile id="3">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Night/3.png" width="576" height="324"/>
+  </tile>
+  <tile id="4">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Night/2.png" width="576" height="324"/>
+  </tile>
+  <tile id="5">
+   <image source="../Sprites/Free Park Zone Tileset/2 Background/Night/1.png" width="576" height="324"/>
+  </tile>
  </tileset>
- <tileset firstgid="416" name="[32x32] Dungeon Bricks Shadow" tilewidth="32" tileheight="32" tilecount="56" columns="8">
-  <image source="../Sprites/dungen bricks/[32x32] Dungeon Bricks Shadow.png" width="256" height="224"/>
+ <tileset firstgid="109" name="objects" tilewidth="72" tileheight="72" tilecount="4" columns="4">
+  <image source="../Sprites/Free Park Zone Tileset/4 Animated objects/Fountain.png" width="288" height="72"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="100"/>
+    <frame tileid="1" duration="100"/>
+    <frame tileid="2" duration="100"/>
+    <frame tileid="3" duration="100"/>
+   </animation>
+  </tile>
  </tileset>
- <layer id="1" name="background" width="20" height="60">
+ <tileset firstgid="113" name="friend1" tilewidth="32" tileheight="32" tilecount="8" columns="8">
+  <image source="../Sprites/1 Pink_Monster/Pink_Monster_Jump_8.png" width="256" height="32"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="100"/>
+    <frame tileid="1" duration="100"/>
+    <frame tileid="2" duration="100"/>
+    <frame tileid="3" duration="100"/>
+    <frame tileid="4" duration="100"/>
+    <frame tileid="5" duration="100"/>
+    <frame tileid="6" duration="100"/>
+    <frame tileid="7" duration="100"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="121" name="friend 2" tilewidth="32" tileheight="32" tilecount="8" columns="8">
+  <image source="../Sprites/2 Owlet_Monster/Owlet_Monster_Jump_8.png" width="256" height="32"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="100"/>
+    <frame tileid="1" duration="100"/>
+    <frame tileid="2" duration="100"/>
+    <frame tileid="3" duration="100"/>
+    <frame tileid="4" duration="100"/>
+    <frame tileid="5" duration="100"/>
+    <frame tileid="6" duration="100"/>
+    <frame tileid="7" duration="100"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="129" name="hoody_guy" tilewidth="32" tileheight="32" tilecount="72" columns="8">
+  <image source="../Sprites/hooded protagnist/AnimationSheet_Character.png" width="256" height="288"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="100"/>
+    <frame tileid="1" duration="100"/>
+    <frame tileid="0" duration="100"/>
+    <frame tileid="1" duration="100"/>
+    <frame tileid="0" duration="100"/>
+    <frame tileid="1" duration="100"/>
+    <frame tileid="0" duration="100"/>
+    <frame tileid="1" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="16">
+   <animation>
+    <frame tileid="16" duration="100"/>
+    <frame tileid="17" duration="100"/>
+    <frame tileid="18" duration="100"/>
+    <frame tileid="19" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="24">
+   <animation>
+    <frame tileid="24" duration="100"/>
+    <frame tileid="25" duration="100"/>
+    <frame tileid="26" duration="100"/>
+    <frame tileid="27" duration="100"/>
+    <frame tileid="28" duration="100"/>
+    <frame tileid="29" duration="100"/>
+    <frame tileid="30" duration="100"/>
+    <frame tileid="31" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="40">
+   <animation>
+    <frame tileid="40" duration="100"/>
+    <frame tileid="41" duration="100"/>
+    <frame tileid="42" duration="100"/>
+    <frame tileid="43" duration="100"/>
+    <frame tileid="44" duration="100"/>
+    <frame tileid="45" duration="100"/>
+    <frame tileid="46" duration="100"/>
+    <frame tileid="47" duration="100"/>
+   </animation>
+  </tile>
+  <tile id="48">
+   <animation>
+    <frame tileid="56" duration="100"/>
+    <frame tileid="57" duration="100"/>
+    <frame tileid="58" duration="100"/>
+    <frame tileid="59" duration="100"/>
+    <frame tileid="60" duration="100"/>
+    <frame tileid="61" duration="100"/>
+    <frame tileid="62" duration="100"/>
+    <frame tileid="63" duration="100"/>
+   </animation>
+  </tile>
+ </tileset>
+ <tileset firstgid="201" name="winner" tilewidth="64" tileheight="64" tilecount="1" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0">
+   <image source="../Sprites/winner.png" width="64" height="64"/>
+  </tile>
+ </tileset>
+ <layer id="4" name="background" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJztwzENAAAMA6DOv5K6rI0dkNBLqqqqqqpPD7H6HQ4=
+   eJxjYBgFo2AUjILhA04OcvNIAYk4xFcCcSWUnYskXsjA0ECKOZQCAJYVBNU=
   </data>
  </layer>
- <layer id="2" name="ground" width="20" height="60">
+ <layer id="1" name="ground" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFtACHGSF4uIKh5j9s7oWJDTW/YAODxf30Dktq20VMehguaYYeYDCF1UC6YTD4n1JA7/JyMKUdaoOB8tdwDEtyAanpaziH3XDOa8SAgfA/Ne1ENgfdTHLswNZWptR91DYPl38pNZOQWSM9r5AChms4Dae+Iz0BNfpWyGoAZdI+yQ==
+   eJxjYBgFo2AUjIJRMBKAPRDHA3ECEMdhYWMTQ5dHFgcAM88HSw==
   </data>
  </layer>
- <layer id="3" name="walls" width="20" height="60">
+ <layer id="5" name="walls" width="20" height="20" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztzLEJADAIRUGz/1gull6IhaQR7oGd//JEZHO17ve1mcbj8Xg8Ho/H4/F4PB6Px9vn/e4CfodlEQ==
+   eJxjYBgFo2AUjIJRMApIBwAGQAAB
   </data>
  </layer>
- <layer id="4" name="spawn_point" width="20" height="60">
+ <layer id="6" name="spawn_point" width="20" height="20" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztzjEBAAAIA6DZP4ktjTEPSEACAAAAQNtOe/DXAc9XAKs=
+   eJxjYBgFo2AUjIJRMAogIAYJEwIAMWABFQ==
   </data>
  </layer>
- <layer id="5" name="next_level" width="20" height="60">
+ <layer id="7" name="next_level" width="20" height="20" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztw6ENAAAIA7Dx/yV8icYgUW3S5Na1AwAAAMCnAX6rAqk=
+   eJxjYBgFo2AUjIJRMApIBwAGQAAB
   </data>
  </layer>
- <layer id="6" name="below_level" width="20" height="60" visible="0">
+ <layer id="8" name="below_level" width="20" height="20" visible="0">
   <data encoding="base64" compression="zlib">
-   eJztyrEJAAAIBLF3/0nc0gVsBMsErrsEAAAAAP517V2fAXFjB/k=
+   eJxjYBgFo2AUjIJRMApIBwAGQAAB
   </data>
  </layer>
 </map>

@@ -12,11 +12,16 @@ def main():
     game = Game()
 
     while True:
-
         done = game.processEvents()
-        if done or game.player.lifes == 0:
-            game.gameover(screen)
-            pygame.time.wait(2000)
+        if game.victory:
+            game.end_screen(screen, "victory")
+            pygame.time.wait(7000)
+            break
+        elif game.player.lifes == 0:
+            game.end_screen(screen, "game_over")
+            pygame.time.wait(7000)
+            break
+        if done:
             break
         else:
             game.runLogic()

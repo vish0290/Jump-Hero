@@ -13,7 +13,7 @@
  </layer>
  <layer id="3" name="ground" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFhEDqQDsADSQCcfJAOwIJgNyTxDC43DQQYLClk8EKBiq9SFLZPHsqmzcQgNphooNHjpxyaziEMSUgFojjqGheARAXUqB/oMo4WttLy3xATHlHyH8jJR8MhzJ6qLeHBlP7crC0qYZ6nMIAOeE5WOKAGDCY0i6xYCDTFj3Da6DiZiDT73ApN6gF9IBYjEpYH4gBALcVbQ==
+   eJxjYBgFhEDqQDsADSQCcfJAOwIJgNyTxDC43DQQYLClk8EKBiq9SFLZPHsqmzcQgJ5pdrCVW0MBxAJxHBXNKwDiQiqaRykgNv3ROp3S0nxiyrvhWncQ8tdwLBOGentoMMXJcM0XAwXICc+hFAeDKe0SC4Z6eQED+MJ+KKUhQoBUvwyWNDkY0pkeEItRCesDMQA/lhU/
   </data>
  </layer>
  <layer id="2" name="walls" width="20" height="60">
@@ -34,11 +34,6 @@
  <layer id="8" name="below_level" width="20" height="60">
   <data encoding="base64" compression="zlib">
    eJztzjEBAAAIwKDVsX9BE3j7QAIKar4DAAAAAIcFwFYAKg==
-  </data>
- </layer>
- <layer id="5" name="decor" width="20" height="60">
-  <data encoding="base64" compression="zlib">
-   eJztzjENAAAIA7D5V8yJixGSVkETAAAAAL6Z60DRAvdgAPk=
   </data>
  </layer>
 </map>

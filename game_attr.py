@@ -11,6 +11,7 @@ class Game(object):
             "level1": Level(fileName="graphics/maps/level1.tmx"),
             "level2": Level(fileName="graphics/maps/level2.tmx"),
             "level3": Level(fileName="graphics/maps/level3.tmx"),
+            "level4": "Victory",
         }
         self.done = False
         self.level_names = list(self.levels.keys())
@@ -27,9 +28,12 @@ class Game(object):
             "level1": "audio/level1.mp3",
             "level2": "audio/level2.mp3",
             "level3": "audio/level3.mp3",
+            "level4": "audio/victory.mp3",
+            "gameover": "audio/game_over.mp3",
         }
         self.currentLevel_music = None
         self.play_music("level1")
+        self.victory = False
 
     def play_music(self, level):
         if self.currentLevel_music:
@@ -69,7 +73,10 @@ class Game(object):
 
         if self.player.next_level():
             self.main_score += self.score
-            self.changeLevel("up")
+            if self.currentLevelNumber == 2:
+                self.victory = True
+            else:
+                self.changeLevel("up")
         elif self.player.below_level() and self.currentLevelNumber > 0:
             self.changeLevel("down")
 
@@ -113,14 +120,63 @@ class Game(object):
                 pygame.draw.rect(screen, (255, 0, 0), tile.rect, 2)
         pygame.display.flip()
 
-    def gameover(self, screen):
-        screen.fill((0, 0, 0))
-        font = pygame.font.Font(None, 36)
-        if self.player.lifes == 0:
-            text = font.render("Game Over", True, (255, 255, 255))
-            text_rect = text.get_rect(center=(screen_width / 2, screen_height / 2))
-            screen.blit(text, text_rect)
-            pygame.display.flip()
+    def end_screen(self, screen, flag):
+        screen.fill((0, 0, 0))  # Fill screen with black color
+
+        # Define fonts
+        title_font = pygame.font.Font(None, 72)
+        text_font = pygame.font.Font(None, 36)
+
+        if flag == "victory":
+            title_text = "Victory"
+            completion_text = "You have completed the game!"
+        else:
+            title_text = "Game Over"
+            completion_text = "Better Luck Next Time!"
+        # Define text content
+        score_text = f"Score: {self.score + self.main_score}"
+        elapsed_seconds = (pygame.time.get_ticks() - self.start_ticks) / 1000
+        hours = int(elapsed_seconds // 3600)
+        minutes = int((elapsed_seconds % 3600) // 60)
+        seconds = int(elapsed_seconds % 60)
+        timer_text = f"Time: {hours:02}:{minutes:02}:{seconds:02}"
+
+        # Render text surfaces
+        title_surface = title_font.render(title_text, True, (255, 215, 0))  # Gold color
+        completion_surface = text_font.render(
+            completion_text, True, (255, 255, 255)
+        )  # White color
+        score_surface = text_font.render(
+            score_text, True, (255, 255, 255)
+        )  # White color
+        timer_surface = text_font.render(
+            timer_text, True, (255, 255, 255)
+        )  # White color
+
+        # Get text rectangles
+        title_rect = title_surface.get_rect(
+            center=(screen_width / 2, screen_height / 2 - 100)
+        )
+        completion_rect = completion_surface.get_rect(
+            center=(screen_width / 2, screen_height / 2 - 20)
+        )
+        score_rect = score_surface.get_rect(
+            center=(screen_width / 2, screen_height / 2 + 40)
+        )
+        timer_rect = timer_surface.get_rect(
+            center=(screen_width / 2, screen_height / 2 + 80)
+        )
+
+        # Blit text surfaces onto the screen
+        screen.blit(title_surface, title_rect)
+        screen.blit(completion_surface, completion_rect)
+        screen.blit(score_surface, score_rect)
+        screen.blit(timer_surface, timer_rect)
+        if flag == "victory":
+            self.play_music("level4")
+        else:
+            self.play_music("gameover")
+        pygame.display.flip()
 
     def scorecard(self):
         font = pygame.font.Font(None, 36)
