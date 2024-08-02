@@ -23,7 +23,7 @@
  </layer>
  <layer id="4" name="spawn_point" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztw6ENAAAIA7Ddxv9HYSdRqDZpAgAAAMDVVH4sL28Axw==
+   eJztw6ENAAAIA7Ddxv9HYedwqDZpAgAAAMCnqdwW+sgAxw==
   </data>
  </layer>
  <layer id="5" name="next_level" width="20" height="60">
@@ -33,7 +33,7 @@
  </layer>
  <layer id="6" name="below_level" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztyaENAAAIwDBu4/+jCA4FBtkmU4sAAAAAgF852t71WwF/CAKV
+   eJzt2KENAAAIA0FmY/+h8AhwCHKXVHWDj7iVbQAAAAD8M/WfrQ/1rwBcdQOd
   </data>
  </layer>
 </map>
