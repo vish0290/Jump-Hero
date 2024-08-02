@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
- <tileset firstgid="1" name="dungen tile" tilewidth="32" tileheight="32" tilecount="56" columns="8">
-  <image source="../Sprites/dungen bricks/[32x32] Dungeon Bricks Plain.png" width="256" height="224"/>
- </tileset>
- <tileset firstgid="57" name="tile shadow" tilewidth="32" tileheight="32" tilecount="56" columns="8">
-  <image source="../Sprites/dungen bricks/[32x32] Dungeon Bricks Shadow.png" width="256" height="224"/>
+ <tileset firstgid="1" name="lab" tilewidth="32" tileheight="32" tilecount="81" columns="9">
+  <image source="../Sprites/lab Tileset/level_tileset.png" width="300" height="300"/>
  </tileset>
  <layer id="1" name="background" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztw0ENAAAMA6HTVv+iZmMPSFg1VVVVVX36AIuZNXA=
+   eJztwzENAAAMBKHb37/f2ugACaumqqqqqk8f/C0zkQ==
   </data>
  </layer>
  <layer id="2" name="ground" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJxjYBi6IBGIkwfaEVAAcksSFGNzEyH5UUA8GKiwHA5xOBz8QAwYjv4cjn4aKDCY6o6BACPd/yCQhgXDACx8RnoYBQJxEBAHU8m8SCCOAuJoKpkHKxNHejwNh/w8HOJyMMXDYHLLQILRcMAN6Jnnhks8DIdyChsYCH9ZoWFS5QFntB2Q
+   eJztlFEKwCAMQ0u9/52HbP52GHB71T7wTyFNTM2KFfhzToUyvxtHi0p2/bug5rDDH8xOZXBTHmiUbxqn9y7j7ETNND1vtMn7LrxZzV+eE70g8HUvqRk0Y2mLciHuUgo9w9H1KM9oH1xCWQBv
   </data>
  </layer>
  <layer id="3" name="walls" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztz7EJwDAQA0DNZZfeJXNk9Lg2jouQQAwnUPc6+JqcJcldx6xua2/r3mT2KI3H4/F4PB7vY+942fv7vzwej8fj8Xg7ehemdUCo
+   eJztzrsOgCAQBdHro7Llh/l0tzREGwa7mWTDFkDOlmSvOT7OsfHOcz9rrpc3s7Wkt4X/la3rm08fSx9LH0sfSx9LH0sfSx9LH0sfSx9LH0sf6w/fDSyEJFg=
   </data>
  </layer>
  <layer id="4" name="spawn_point" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztw6ENAAAIA7Ddxv9HYedwqDZpAgAAAMCnqdwW+sgAxw==
+   eJztz7ENADAIBLHv2X/ftGwAQbZ0A1wCAAAAMK9av6rc+NjmAZHwAE4=
   </data>
  </layer>
  <layer id="5" name="next_level" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztw6ENAAAIA7Ddxv9H4SeQqDZpcpsKAAAAAJ8WQq0BCQ==
+   eJztw6ENAAAIA7B5/v8XP4FEtUmT21QAAAAA+LRFZQAt
   </data>
  </layer>
  <layer id="6" name="below_level" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJzt2KENAAAIA0FmY/+h8AhwCHKXVHWDj7iVbQAAAAD8M/WfrQ/1rwBcdQOd
+   eJztySEKAAAIBEG7//+vCCbBZpyBLXcRAAAAAPArp2vfXX8rJlgAhQ==
   </data>
  </layer>
 </map>

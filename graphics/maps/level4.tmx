@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="1">
+ <tileset firstgid="1" name="village" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+  <image source="../Sprites/village/TX Tileset Ground.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="257" name="sky" tilewidth="736" tileheight="414" tilecount="1" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0">
+   <image source="../Sprites/victory.jpg" width="736" height="414"/>
+  </tile>
+ </tileset>
+ <layer id="2" name="background" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRMBIAIyN1zQMABt8AAw==
+  </data>
+ </layer>
+</map>
