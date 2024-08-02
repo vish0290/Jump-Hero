@@ -47,6 +47,11 @@ The game uses assets from the following sources:
 5. [Sci-Fi Lab Tileset](https://foozlecc.itch.io/sci-fi-lab-tileset-decor-traps)
 
 
+## Screenshots
+![Level 1](graphics/images/lvl1.png)
+![Level 2](graphics/images/lvl2.png)
+![Level 3](graphics/images/lvl3.png)
+
 ## References
 
 ### Libraries and Frameworks
