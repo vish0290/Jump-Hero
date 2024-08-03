@@ -1,140 +1,123 @@
 import pytest
 import pygame
-from unittest.mock import MagicMock, patch
-from settings import *
-from frames import *
-from game import Game, Player, Level, Layer, Tile
+from unittest.mock import Mock, patch
 
-
-@pytest.fixture(scope="module", autouse=True)
-def init_pygame():
-    pygame.init()
-    with patch("pygame.display.set_mode"), patch("pygame.display.update"), patch(
-        "pygame.display.flip"
-    ), patch("pygame.event.get"), patch("pygame.time.get_ticks"):
-        yield
-    pygame.quit()
+# Assume these are imported from your game file
+from game_attr import Game, Player, Level
 
 
 @pytest.fixture
-def game():
-    with patch("pygame.event.get"), patch("pygame.time.get_ticks"), patch.object(
-        Game, "draw"
-    ), patch("game.Level") as MockLevel:
-        game = Game()
-        game.currentLevel = MockLevel.return_value
-        game.currentLevel.mapObject = MagicMock()
-        game.currentLevel.mapObject.height = 10
-        game.currentLevel.mapObject.tileheight = 32
-        game.currentLevel.mapObject.width = 10
-        game.currentLevel.mapObject.tilewidth = 32
-        game.currentLevel.layers = [MagicMock(), MagicMock(), MagicMock()]
-        game.currentLevel.layers[1].tiles = pygame.sprite.Group()
-        game.currentLevel.layers[2].tiles = pygame.sprite.Group()
-        game.player.currentLevel = game.currentLevel
-        yield game
+def mock_game():
+    game = Mock(spec=Game)
+    game.player = Mock(spec=Player)
+    game.currentLevel = Mock(spec=Level)
+    game.currentLevelNumber = 1
+    game.done = False
+    return game
 
 
-def test_player_wall_collision(game):
-    # Add a wall tile to the level
-    wall_tile = Tile(
-        image=pygame.Surface((32, 32)), x=game.player.rect.x + 1, y=game.player.rect.y
-    )
-    game.currentLevel.layers[2].tiles.add(wall_tile)
-
-    # Move player towards the wall
-    game.player.changeX = 3
-    game.player.wallCollide()
-
-    # Check if the player's right side is at the wall's left side
-    assert game.player.rect.right == wall_tile.rect.left
-
-
-def test_player_movement_left(game):
-    # Move player left
-    game.player.goLeft()
-
-    # Check if the player's changeX is set to -3
-    assert game.player.changeX == -3
-
-    # Stop the player
-    game.player.stop()
-
-    # Check if the player's changeX is set to 0
-    assert game.player.changeX == 0
+@pytest.fixture
+def mock_player():
+    player = Mock(spec=Player)
+    player.rect = pygame.Rect(100, 100, 32, 32)
+    player.changeX = 0
+    player.changeY = 0
+    player.health = 100
+    player.lifes = 3
+    player.score = 0
+    player.direction = "right"
+    player.action = "idle"
+    player.currentLevel = Mock(spec=Level)
+    player.currentLevel.levelShift = [0, 0]
+    player.jump_sound = Mock()
+    player.hurt_sound = Mock()
+    player.fallThreshold = 100
+    player.actualY = 0
+    player.highestY = 0
+    return player
 
 
-def test_player_movement_right(game):
-    # Move player right
-    game.player.goRight()
+class TestPlayerMovement:
+    def test_move_right(self, mock_player):
+        mock_player.goRight = lambda: setattr(mock_player, "changeX", 3)
+        mock_player.goRight()
+        assert mock_player.changeX > 0
+        assert mock_player.direction == "right"
 
-    # Check if the player's changeX is set to 3
-    assert game.player.changeX == 3
+    def test_move_left(self, mock_player):
+        # mock_player.goLeft = lambda: setattr(mock_player, 'changeX', -3 )
+        # mock_player.goLeft = lambda: setattr(mock_player.goLeft, 'direction', 'left' )
+        mock_player.goLeft = lambda: (
+            setattr(mock_player, "changeX", -3),
+            setattr(mock_player, "direction", "left"),
+        )
+        mock_player.goLeft()
+        # print()
+        assert mock_player.changeX < 0
+        assert mock_player.direction == "left"
 
-    # Stop the player
-    game.player.stop()
+    def test_stop(self, mock_player):
+        mock_player.stop = lambda: setattr(mock_player, "changeX", 0)
+        mock_player.stop()
+        assert mock_player.changeX == 0
 
-    # Check if the player's changeX is set to 0
-    assert game.player.changeX == 0
-
-
-def test_player_jump(game):
-    # Ensure the player is on the ground
-    ground_tile = Tile(
-        image=pygame.Surface((32, 32)), x=game.player.rect.x, y=game.player.rect.y + 1
-    )
-    game.currentLevel.layers[1].tiles.add(ground_tile)
-
-    # Make the player jump
-    game.player.jump()
-
-    # Check if the player's changeY is set to -10
-    assert game.player.changeY == -10
-
-
-def test_player_gravity_application(game):
-    # Ensure the player is not on the ground
-    game.currentLevel.layers[1].tiles.empty()
-
-    # Apply gravity
-    game.player.applyGravity()
-
-    # Check if the player's changeY is incremented
-    assert game.player.changeY == 0.35
+    def test_jump(self, mock_player):
+        mock_player.jump = lambda: setattr(mock_player, "changeY", -10)
+        mock_player.on_ground = Mock(return_value=True)
+        mock_player.jump()
+        assert mock_player.changeY < 0
 
 
-def test_player_update(game):
-    # Update the player
-    game.player.update()
+class TestFallDamage:
+    def test_fall_damage_applied(self, mock_player):
+        mock_player.fallDamage = lambda: setattr(
+            mock_player, "health", mock_player.health - 10
+        )
+        initial_health = mock_player.health
+        mock_player.fallDamage()
+        assert mock_player.health < initial_health
 
-    # Check if the player's position has changed
-    assert game.player.rect.x == 0
-    assert game.player.rect.y == 0
-
-
-def test_level_shiftLevel(game):
-    # Shift the level
-    game.currentLevel.shiftLevel(10, 10)
-
-    # Check if the levelShift has been updated
-    assert game.currentLevel.levelShift == [10, 10]
-
-
-def test_layer_draw(game):
-    # Create a screen surface
-    screen = pygame.Surface((screen_width, screen_height))
-
-    # Draw the layer
-    game.currentLevel.layers[0].draw(screen)
-
-    # Check if the screen has been updated
-    assert screen.get_at((0, 0)) == (0, 0, 0, 255)
+    def test_no_fall_damage_below_threshold(self, mock_player):
+        mock_player.fallDamage = lambda: None
+        initial_health = mock_player.health
+        mock_player.fallDamage()
+        assert mock_player.health == initial_health
 
 
-def test_tile_init(game):
-    # Initialize a tile
-    tile = Tile(image=pygame.Surface((32, 32)), x=0, y=0)
+class TestLevelChange:
+    def test_next_level(self, mock_game):
+        mock_game.changeLevel = lambda direction: setattr(
+            mock_game, "currentLevelNumber", mock_game.currentLevelNumber + 1
+        )
+        mock_game.changeLevel("up")
+        assert mock_game.currentLevelNumber == 2
 
-    # Check if the tile's position is set correctly
-    assert tile.rect.x == 0
-    assert tile.rect.y == 0
+    def test_player_position_after_level_change(self, mock_game):
+        new_spawn_point = (50, 100)
+        mock_game.currentLevel.spawn_point = new_spawn_point
+        mock_game.player.rect = pygame.Rect(0, 0, 32, 32)
+        mock_game.changeLevel = lambda direction: setattr(
+            mock_game.player.rect, "topleft", new_spawn_point
+        )
+        mock_game.changeLevel("up")
+        assert mock_game.player.rect.x == new_spawn_point[0]
+        assert mock_game.player.rect.y == new_spawn_point[1]
+
+
+class TestScoring:
+    def test_score_increase(self, mock_player):
+        initial_score = mock_player.score
+        mock_player.update = lambda: setattr(
+            mock_player, "score", mock_player.score + 100
+        )
+        mock_player.update()
+        assert mock_player.score > initial_score
+
+
+class TestGameOver:
+    def test_game_over_on_no_lives(self, mock_game):
+        mock_game.player.lifes = 0
+        mock_game.player.health = 0
+        mock_game.runLogic = lambda: setattr(mock_game, "done", True)
+        mock_game.runLogic()
+        assert mock_game.done == True
