@@ -307,7 +307,7 @@
  </layer>
  <layer id="2" name="ground" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFtACHGSF4uIKh5j9s7oWJDTW/YAODxf30Dktq20VMehguaYYeYDCF1UC6YTD4n1JA7/JyMKUdaoOB8tdwDEtyAanpaziH3XDOa8SAgfA/Ne1ENgfdTHLswNZWptR91DYPl38pNZOQWSM9r5AChms4Dae+Iz0BNfpWyGoAZdI+yQ==
+   eJxjYBgFtACHGSF4uIKh5j9s7oWJDTW/YAODxf30Dktq20VMehguaYYeYDCF1UC6YTD4n1JA7/JyMKUdaoOB8tdwDEtyAanpaziH3XDOa8SAgfA/Ne1ENgfdTHLswNZWptR91DYPl38pNZOQWSM9r5AChms4Dae+Iz0BerhRigH6FUf5
   </data>
  </layer>
  <layer id="3" name="walls" width="20" height="60">
@@ -325,9 +325,9 @@
    eJztw6ENAAAIA7Dx/yV8icYgUW3S5Na1AwAAAMCnAX6rAqk=
   </data>
  </layer>
- <layer id="6" name="below_level" width="20" height="60" visible="0">
+ <layer id="6" name="below_level" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztyrEJAAAIBLF3/0nc0gVsBMsErrsEAAAAAP517V2fAXFjB/k=
+   eJztwTEBAAAAwqD1T20ND6AAAAAA4NcAEsAAAQ==
   </data>
  </layer>
 </map>
