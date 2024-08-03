@@ -3,14 +3,14 @@
  <tileset firstgid="1" name="lab" tilewidth="32" tileheight="32" tilecount="81" columns="9">
   <image source="../Sprites/lab Tileset/level_tileset.png" width="300" height="300"/>
  </tileset>
- <layer id="1" name="background" width="20" height="60">
+ <layer id="1" name="background" width="20" height="60" visible="0">
   <data encoding="base64" compression="zlib">
    eJztwzENAAAMBKHb37/f2ugACaumqqqqqk8f/C0zkQ==
   </data>
  </layer>
  <layer id="2" name="ground" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztlFEKwCAMQ0u9/52HbP52GHB71T7wTyFNTM2KFfhzToUyvxtHi0p2/bug5rDDH8xOZXBTHmiUbxqn9y7j7ETNND1vtMn7LrxZzV+eE70g8HUvqRk0Y2mLciHuUgo9w9H1KM9oH1xCWQBv
+   eJztlEEKwCAMBEPy/z+X0h6khxYXrBPNQA5ChM2u0awYgd+1K5T53ThaVLLrXwU1hxXeYHYqg4vyQKN809h97zLOTtRM0/NFdPa7cGc0szwnekHg772kZhDG0vaWC/EvnU005Y9zT50cR80AlA==
   </data>
  </layer>
  <layer id="3" name="walls" width="20" height="60">
@@ -20,7 +20,7 @@
  </layer>
  <layer id="4" name="spawn_point" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztz7ENADAIBLHv2X/ftGwAQbZ0A1wCAAAAMK9av6rc+NjmAZHwAE4=
+   eJztw6ENAAAIA7B5/v8XM8UDmDZpAgAAAPBvGq4FQPwAFw==
   </data>
  </layer>
  <layer id="5" name="next_level" width="20" height="60">
@@ -30,7 +30,7 @@
  </layer>
  <layer id="6" name="below_level" width="20" height="60">
   <data encoding="base64" compression="zlib">
-   eJztySEKAAAIBEG7//+vCCbBZpyBLXcRAAAAAPArp2vfXX8rJlgAhQ==
+   eJztwTEBAAAAwqD1T20ND6AAAAAA4NcAEsAAAQ==
   </data>
  </layer>
 </map>

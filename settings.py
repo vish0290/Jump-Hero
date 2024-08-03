@@ -1,12 +1,12 @@
 screen_width = 800
 screen_height = 640
 screen_title = "Jump Hero"
-player_width = 64
-player_height = 64
+player_width = 32
+player_height = 32
 player_speed = 5
 player_direction = "down"
-sprite_width = 64
-sprite_height = 64
+sprite_width = 32
+sprite_height = 32
 map_collision_layer = 2
 map_ground_layer = 1
 background = (0, 0, 0)

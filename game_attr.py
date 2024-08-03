@@ -2,10 +2,14 @@ import pygame
 import pytmx
 from settings import *
 from frames import *
+import os
+from datetime import datetime
 
 
 class Game(object):
     def __init__(self):
+        self.tile_width = 32  # Width of a single tile
+        self.tile_height = 32  # Height of a single tile
         self.currentLevelNumber = 0
         self.levels = {
             "level1": Level(fileName="graphics/maps/level1.tmx"),
@@ -16,6 +20,8 @@ class Game(object):
         self.done = False
         self.level_names = list(self.levels.keys())
         self.currentLevel = self.levels["level1"]
+        self.level_width = self.currentLevel.mapObject.width * self.tile_width
+        self.level_height = self.currentLevel.mapObject.height * self.tile_height
         self.player = Player(
             x=self.currentLevel.spawn_point[0], y=self.currentLevel.spawn_point[1]
         )
@@ -34,6 +40,14 @@ class Game(object):
         self.currentLevel_music = None
         self.play_music("level1")
         self.victory = False
+        self.log_file = self.setup_logging()
+
+    def setup_logging(self):
+        log_dir = "logs"
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        return open(f"{log_dir}/game_log_{timestamp}.txt", "w")
 
     def play_music(self, level):
         if self.currentLevel_music:
@@ -71,20 +85,49 @@ class Game(object):
         self.health = self.player.health
         self.lifes = self.player.lifes
 
+        # Log current dimensions for debugging
+        print(f"Level dimensions: {self.level_width}x{self.level_height}")
+        print(f"Player position: ({self.player.rect.x}, {self.player.rect.y})")
+
+        # Check for player boundaries within the level
+        if self.player.rect.y < 0:
+            self.player.rect.y = 0
+        elif self.player.rect.y > self.level_height - self.player.rect.height:
+            self.player.rect.y = self.level_height - self.player.rect.height
+
+        if self.player.rect.x < 0:
+            self.player.rect.x = 0
+        elif self.player.rect.x > self.level_width - self.player.rect.width:
+            self.player.rect.x = self.level_width - self.player.rect.width
+
         if self.player.next_level():
             self.main_score += self.score
             if self.currentLevelNumber == 2:
                 self.victory = True
             else:
                 self.changeLevel("up")
-        elif self.player.below_level() and self.currentLevelNumber > 0:
-            self.changeLevel("down")
+        # elif self.player.below_level() and self.currentLevelNumber > 0:
+        #     self.changeLevel("down")
+        self.log_player()
+
+    def log_player(self):
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")[:-3]
+        log_entry = (
+            f"Time: {current_time}, "
+            f"Level: {self.level_names[self.currentLevelNumber]}, "
+            f"Player Rect Y: {self.player.rect.y}, "
+            f"Player Actual Y: {self.player.actualY}, "
+            f"Spawn Point Y: {self.currentLevel.spawn_point[1]}, "
+            f"Level Shift Y: {self.currentLevel.levelShift[1]}\n"
+        )
+        self.log_file.write(log_entry)
+        self.log_file.flush()
 
     def changeLevel(self, direction):
         if direction == "up":
             self.currentLevelNumber += 1
-        elif direction == "down":
-            self.currentLevelNumber -= 1
+        # elif direction == "down":
+        #     self.currentLevelNumber -= 1
 
         self.currentLevel = self.levels[self.level_names[self.currentLevelNumber]]
 
@@ -93,8 +136,8 @@ class Game(object):
             print(
                 f"Changing to level: {self.level_names[self.currentLevelNumber]} spawn point: {new_pos}"
             )
-        else:
-            new_pos = self.currentLevel.drop_point
+        # else:
+        #     new_pos = self.currentLevel.drop_point
 
         print(f"Changing to level: {self.level_names[self.currentLevelNumber]}")
         print(f"New player position: {new_pos}")
@@ -104,6 +147,7 @@ class Game(object):
         self.play_music(self.level_names[self.currentLevelNumber])
 
         print(f"Player rect after change: { self.player.rect}")
+        self.log_player()
 
     def draw(self, screen):
         screen.fill(background)
@@ -198,6 +242,10 @@ class Game(object):
         )
         return text_surface
 
+    def __del__(self):
+        if hasattr(self, "log_file"):
+            self.log_file.close()
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -218,6 +266,7 @@ class Player(pygame.sprite.Sprite):
         # Set speed and direction
         self.changeX = 0
         self.changeY = 0
+        self.difference = 0
         self.direction = "right"
         self.action = "idle"
 
@@ -382,25 +431,25 @@ class Player(pygame.sprite.Sprite):
             self.currentLevel.mapObject.height * self.currentLevel.mapObject.tileheight
         )
         if self.rect.right >= screen_width - 200:
-            difference = self.rect.right - (screen_width - 200)
+            self.difference = self.rect.right - (screen_width - 200)
             self.rect.right = screen_width - 200
-            self.currentLevel.shiftLevel(-difference, 0)
+            self.currentLevel.shiftLevel(-self.difference, 0)
         elif self.rect.left <= 200:
-            difference = 200 - self.rect.left
+            self.difference = 200 - self.rect.left
             self.rect.left = 200
-            self.currentLevel.shiftLevel(difference, 0)
+            self.currentLevel.shiftLevel(self.difference, 0)
 
         if self.rect.top <= 200 and self.currentLevel.levelShift[1] < 0:
-            difference = 200 - self.rect.top
+            self.difference = 200 - self.rect.top
             self.rect.top = 200
-            self.currentLevel.shiftLevel(0, difference)
+            self.currentLevel.shiftLevel(0, self.difference)
 
         elif self.rect.bottom >= screen_height - 200 and self.currentLevel.levelShift[
             1
         ] > -(map_height - screen_height):
-            difference = self.rect.bottom - (screen_height - 200)
+            self.difference = self.rect.bottom - (screen_height - 200)
             self.rect.bottom = screen_height - 200
-            self.currentLevel.shiftLevel(0, -difference)
+            self.currentLevel.shiftLevel(0, -self.difference)
 
         if (
             self.rect.y - self.currentLevel.levelShift[1]
@@ -418,7 +467,7 @@ class Player(pygame.sprite.Sprite):
             self.actualY = self.rect.y - self.currentLevel.levelShift[1]
 
         print(
-            f"player y: {self.actualY},{self.currentLevel.spawn_point[1]} highest y: {self.highestY}"
+            f"player y: {self.actualY} camera_player {self.rect.y},{self.currentLevel.spawn_point[1]} highest y: {self.highestY}"
         )
         # Update the player's animation frame
         try:
