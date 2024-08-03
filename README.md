@@ -68,6 +68,6 @@ The game uses assets from the following sources:
 - [Pygame Tiled Demo](https://github.com/katmfoo/pygame-tiled-demo)
 - [Pygame Tutorial Video](https://youtu.be/AY9MnQ4x3zk?si=id02AdiEujKSoqsI)
 
-## Note from the Vish
+## Note from Vish
 
 > "This game is designed to have fun take it easy and chill"
