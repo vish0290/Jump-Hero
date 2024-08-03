@@ -90,6 +90,9 @@ class Game(object):
 
         if direction == "up":
             new_pos = self.currentLevel.spawn_point
+            print(
+                f"Changing to level: {self.level_names[self.currentLevelNumber]} spawn point: {new_pos}"
+            )
         else:
             new_pos = self.currentLevel.drop_point
 
@@ -502,7 +505,6 @@ class Level(object):
                         y * self.mapObject.tileheight + 1,
                     )
                     break
-                    # exit()
 
         if not self.drop_point:
             self.drop_point = (
